@@ -1,481 +1,496 @@
-
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Magic Christmas Tree</title>
-    <style>
-        body { 
-            margin: 0; overflow: hidden; background-color: #000; 
-            font-family: 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif; 
-            display: flex; justify-content: center; align-items: center; 
-            height: 100vh; width: 100vw; user-select: none;
-            touch-action: none;
-        }
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        /* 容器自适应 */
-        #canvas-wrapper {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            overflow: hidden;
-            touch-action: none; 
-        }
+        <!--=============== FAVICON ===============-->
+        <link rel="shortcut icon" href="assets/img/favicon.png" type="image/x-icon">
 
-        #canvas-container { width: 100%; height: 100%; display: block; }
-        
-        /* UI 层适配 */
-        #ui-layer {
-            position: absolute; 
-            top: 20px; 
-            left: 20px; 
-            z-index: 3; 
-            pointer-events: none;
-            color: #fff; 
-            text-shadow: 0 2px 10px rgba(0,0,0,0.9);
-            transition: opacity 0.5s;
-        }
+        <!--=============== BOXICONS ===============-->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
 
-        h1 {
-            font-weight: 200; 
-            letter-spacing: 4px; 
-            text-transform: uppercase; 
-            font-size: 1.5rem; 
-            margin: 0 0 8px 0;
-            background: linear-gradient(to right, #fff, #ffd700, #fff); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent;
-        }
+        <!--=============== SWIPER CSS ===============--> 
+        <link rel="stylesheet" href="assets/css/swiper-bundle.min.css">
 
-        #loading {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            color: #d4af37; font-size: 0.9rem; letter-spacing: 2px; z-index: 10; 
-            pointer-events: none; transition: opacity 0.5s; font-weight: 300;
-        }
+        <!--=============== CSS ===============--> 
+        <link rel="stylesheet" href="assets/css/styles.css">
 
-        /* 按钮适配 */
-        #fullscreen-btn {
-            position: absolute; 
-            bottom: 20px; 
-            right: 20px; 
-            z-index: 20;
-            background: rgba(0,0,0,0.3); 
-            color: #d4af37; 
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            width: 48px; 
-            height: 48px; 
-            border-radius: 50%; 
-            cursor: pointer;
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            font-size: 1.4rem; 
-            transition: all 0.3s;
-            backdrop-filter: blur(4px);
-            -webkit-tap-highlight-color: transparent;
-        }
+        <title>Responsive Halloween Website</title>
+    </head>
+    <body>
+        <!--==================== HEADER ====================-->
+        <header class="header" id="header">
+            <nav class="nav container">
+                <a href="#" class="nav__logo">
+                    <img src="assets/img/logo.png" alt="" class="nav__logo-img">
+                    Halloween
+                </a>
 
-        /* 祝福语容器适配 */
-        #message-container {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 5;
-            pointer-events: none;
-            overflow: hidden;
-        }
+                <div class="nav__menu" id="nav-menu">
+                    <ul class="nav__list">
+                        <li class="nav__item">
+                            <a href="#home" class="nav__link active-link">Home</a>
+                        </li>
 
-        .bubble-message {
-            position: absolute;
-            color: #fff;
-            background: rgba(255, 215, 0, 0.2); 
-            border: 1px solid rgba(255, 215, 0, 0.4);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem; 
-            letter-spacing: 1px;
-            text-shadow: 0 0 5px rgba(255, 215, 0, 0.8);
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
-            backdrop-filter: blur(4px);
-            white-space: nowrap;
-            opacity: 0;
-            animation-name: bubbleFloat;
-            animation-timing-function: ease-in-out;
-            animation-fill-mode: forwards;
-        }
+                        <li class="nav__item">
+                            <a href="#about" class="nav__link">About</a>
+                        </li>
 
-        @keyframes bubbleFloat {
-            0% { opacity: 0; transform: translateY(40px) scale(0.6); }
-            15% { opacity: 1; transform: translateY(0) scale(1.05); }
-            100% { opacity: 0; transform: translateY(-100px) scale(0.9); }
-        }
+                        <li class="nav__item">
+                            <a href="#trick" class="nav__link">Candy</a>
+                        </li>
 
-        .hide-ui #ui-layer { opacity: 0; pointer-events: none; }
-        
-        @media (max-height: 450px) {
-            h1 { font-size: 1.2rem; }
-            #ui-layer { top: 10px; left: 10px; }
-        }
-    </style>
+                        <li class="nav__item">
+                            <a href="#new" class="nav__link">New</a>
+                        </li>
+
+                        <a href="#" class="button button--ghost">Support</a>
+                    </ul>
+
+                    <div class="nav__close" id="nav-close">
+                        <i class='bx bx-x'></i>
+                    </div>
+
+                    <img src="assets/img/nav-img.png" alt="" class="nav__img">
+                </div>
+
+                <div class="nav__toggle" id="nav-toggle">
+                    <i class='bx bx-grid-alt'></i>
+                </div>
+
+            </nav>
+        </header>
+
+        <main class="main">
+            <!--==================== HOME ====================-->
+            <section class="home container" id="home">
+                <div class="swiper home-swiper">
+                    <div class="swiper-wrapper">
+                        <!-- HOME SLIDER 1 -->
+                        <section class="swiper-slide">
+                            <div class="home__content grid">
+                                <div class="home__group">
+                                    <img src="assets/img/home1-img.png" alt="" class="home__img">
+                                    <div class="home__indicator"></div>
     
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
-            }
-        }
-    </script>
-</head>
-<body>
+                                    <div class="home__details-img">
+                                        <h4 class="home__details-title">The Labu “Reiza”</h4>
+                                        <span class="home__details-subtitle">The Living Pumpkin</span>
+                                    </div>
+                                </div>
+    
+                                <div class="home__data">
+                                    <h3 class="home__subtitle">#1 Top Scariest Ghost</h3>
+                                    <h1 class="home__title">UOOOO <br> TRICK OR <br> TREAT!!</h1>
+                                    <p class="home__description">Hi, I'm Reiza, people call me "El Labu". I am currently trying to learn 
+                                        something new, building my own bike with parts made only in Malaysia.
+                                    </p>
 
-    <div id="canvas-wrapper">
-        <div id="canvas-container"></div>
+                                    <div class="home__buttons">
+                                        <a href="#" class="button">Book Now</a>
+                                        <a href="#" class="button--link button--flex">Track Record <i class='bx bx-right-arrow-alt button__icon'></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- HOME SLIDER 2 -->
+                        <section class="swiper-slide">
+                            <div class="home__content grid">
+                                <div class="home__group">
+                                    <img src="assets/img/home2-img.png" alt="" class="home__img">
+                                    <div class="home__indicator"></div>
+    
+                                    <div class="home__details-img">
+                                        <h4 class="home__details-title">Adino & Grahami</h4>
+                                        <span class="home__details-subtitle">No words can describe them</span>
+                                    </div>
+                                </div>
+    
+                                <div class="home__data">
+                                    <h3 class="home__subtitle">#2 top Best duo</h3>
+                                    <h1 class="home__title">BRING BACK <br> MY COTTON <br> CANDY</h1>
+                                    <p class="home__description">Adino steals cotton candy from his brother and eats them all in one bite, 
+                                        a hungry beast. Grahami can no longer contain his anger towards Adino.
+                                    </p>
+
+                                    <div class="home__buttons">
+                                        <a href="#" class="button">Book Now</a>
+                                        <a href="#" class="button--link button--flex">Track Record <i class='bx bx-right-arrow-alt button__icon'></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- HOME SLIDER 3 -->
+                        <section class="swiper-slide">
+                            <div class="home__content grid">
+                                <div class="home__group">
+                                    <img src="assets/img/home3-img.png" alt="" class="home__img">
+                                    <div class="home__indicator"></div>
+    
+                                    <div class="home__details-img">
+                                        <h4 class="home__details-title">Captain Sem</h4>
+                                        <span class="home__details-subtitle">Veteran Spooky Ghost</span>
+                                    </div>
+                                </div>
+    
+                                <div class="home__data">
+                                    <h3 class="home__subtitle">#3 Top Scariest  Ghost</h3>
+                                    <h1 class="home__title">RESPAWN <br> THE SPOOKY <br> SKULL</h1>
+                                    <p class="home__description">In search for cute little puppy, Captain Sem has come back from his tragic death. 
+                                        With his hogwarts certified power he promise to be a hero for all of ghostkind.
+                                    </p>
+
+                                    <div class="home__buttons">
+                                        <a href="#" class="button">Book Now</a>
+                                        <a href="#" class="button--link button--flex">Track Record <i class='bx bx-right-arrow-alt button__icon'></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+            </section>
+            
+            <!--==================== CATEGORY ====================-->
+            <section class="section category">
+                <h2 class="section__title">Favorite Scare <br> Category</h2>
+
+                <div class="category__container container grid">
+                    <div class="category__data">
+                        <img src="assets/img/category1-img.png" alt="" class="category__img">
+                        <h3 class="category__title">Ghosts</h3>
+                        <p class="category__description">Choose the ghosts, the scariest there are.</p>
+                    </div>
+
+                    <div class="category__data">
+                        <img src="assets/img/category2-img.png" alt="" class="category__img">
+                        <h3 class="category__title">Pumpkins</h3>
+                        <p class="category__description">You look at the scariest pumpkins there is.</p>
+                    </div>
+
+                    <div class="category__data">
+                        <img src="assets/img/category3-img.png" alt="" class="category__img">
+                        <h3 class="category__title">Witch Hat</h3>
+                        <p class="category__description">Pick the most stylish witch hats out there.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!--==================== ABOUT ====================-->
+            <section class="section about" id="about">
+                <div class="about__container container grid">
+                    <div class="about__data">
+                        <h2 class="section__title about__title">About Halloween <br> Night</h2>
+                        <p class="about__description">Night of all the saints, or all the dead, is celebrated on October 31 and it is a 
+                            very fun international celebration, this celebration comes from ancient origins, and is already 
+                            celebrated by everyone.
+                        </p>
+                        <a href="#" class="button">Know more</a>
+                    </div>
+
+                    <img src="assets/img/about-img.png" alt="" class="about__img">
+                </div>
+            </section>
+
+            <!--==================== TRICK OR TREAT ====================-->
+            <section class="section trick" id="trick">
+                <h2 class="section__title">Trick Or Treat</h2>
+
+                <div class="trick__container container grid">
+                    <div class="trick__content">
+                        <img src="assets/img/trick-treat1-img.png" alt="" class="trick__img">
+                        <h3 class="trick__title">Toffee</h3>
+                        <span class="trick__subtitle">Candy</span>
+                        <span class="trick__price">$11.99</span>
+                        <button class="button trick__button">
+                            <i class='bx bx-cart-alt trick__icon'></i>
+                        </button>
+                    </div>
+
+                    <div class="trick__content">
+                        <img src="assets/img/trick-treat2-img.png" alt="" class="trick__img">
+                        <h3 class="trick__title">Bone</h3>
+                        <span class="trick__subtitle">Accessory</span>
+                        <span class="trick__price">$8.99</span>
+                        <button class="button trick__button">
+                            <i class='bx bx-cart-alt trick__icon'></i>
+                        </button>
+                    </div>
+
+                    <div class="trick__content">
+                        <img src="assets/img/trick-treat3-img.png" alt="" class="trick__img">
+                        <h3 class="trick__title">Scarecrow</h3>
+                        <span class="trick__subtitle">Accessory</span>
+                        <span class="trick__price">$15.99</span>
+                        <button class="button trick__button">
+                            <i class='bx bx-cart-alt trick__icon'></i>
+                        </button>
+                    </div>
+
+                    <div class="trick__content">
+                        <img src="assets/img/trick-treat4-img.png" alt="" class="trick__img">
+                        <h3 class="trick__title">Candy Cane</h3>
+                        <span class="trick__subtitle">Candy</span>
+                        <span class="trick__price">$7.99</span>
+                        <button class="button trick__button">
+                            <i class='bx bx-cart-alt trick__icon'></i>
+                        </button>
+                    </div>
+
+                    <div class="trick__content">
+                        <img src="assets/img/trick-treat5-img.png" alt="" class="trick__img">
+                        <h3 class="trick__title">Pumpkin</h3>
+                        <span class="trick__subtitle">Candy</span>
+                        <span class="trick__price">$19.99</span>
+                        <button class="button trick__button">
+                            <i class='bx bx-cart-alt trick__icon'></i>
+                        </button>
+                    </div>
+
+                    <div class="trick__content">
+                        <img src="assets/img/trick-treat6-img.png" alt="" class="trick__img">
+                        <h3 class="trick__title">Ghost</h3>
+                        <span class="trick__subtitle">Accessory</span>
+                        <span class="trick__price">$17.99</span>
+                        <button class="button trick__button">
+                            <i class='bx bx-cart-alt trick__icon'></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+            
+            <!--==================== DISCOUNT ====================-->
+            <section class="section discount">
+                <div class="discount__container container grid">
+                    <div class="discount__data">
+                        <h2 class="discount__title">50% Discount <br> On New Products</h2>
+                        <a href="#" class="button">Go to new</a>
+                    </div>
+
+                    <img src="assets/img/discount-img.png" alt="" class="discount__img">
+                </div>
+            </section>
+
+            <!--==================== NEW ARRIVALS ====================-->
+            <section class="section new" id="new">
+                <h2 class="section__title">New Arrivals</h2>
+
+                <div class="new__container container">
+                    <div class="swiper new-swiper">
+                        <div class="swiper-wrapper">
+                            <div class="new__content swiper-slide">
+                                <div class="new__tag">New</div>
+                                <img src="assets/img/new1-img.png" alt="" class="new__img">
+                                <h3 class="new__title">Haunted House</h3>
+                                <span class="new__subtitle">Accessory</span>
+                                
+                                <div class="new__prices">
+                                    <span class="new__price">$14.99</span>
+                                    <span class="new__discount">$29.99</span>
+                                </div>
+
+                                <button class="button new__button">
+                                    <i class='bx bx-cart-alt new__icon'></i>
+                                </button>
+                            </div>
         
-        <button id="fullscreen-btn" onclick="toggleUI()" title="切换沉浸模式">⛶</button>
-
-        <div id="ui-layer">
-            <h1>Merry Christmas</h1>
-            <p style="font-size: 0.7rem; opacity: 0.7; letter-spacing: 1px;">点击这棵树开启惊喜</p>
-        </div>
+                            <div class="new__content swiper-slide">
+                                <div class="new__tag">New</div>
+                                <img src="assets/img/new2-img.png" alt="" class="new__img">
+                                <h3 class="new__title">Halloween Candle</h3>
+                                <span class="new__subtitle">Accessory</span>
         
-        <div id="message-container"></div>
-        <div id="loading">CRAFTING MAGIC...</div>
-    </div>
+                                <div class="new__prices">
+                                    <span class="new__price">$11.99</span>
+                                    <span class="new__discount">$21.99</span>
+                                </div>
 
-    <script type="module">
-        import * as THREE from 'three';
-        import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
-        import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-        import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-        import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-
-        const GREETINGS = [
-            "🎄 圣诞快乐，愿星光铺满你的前路",
-            "🍎 平安夜的苹果，愿你岁岁平安喜乐",
-            "🎅 圣诞老人偷懒的话，我来给你送惊喜",
-            "🔔 岁岁常欢愉",
-            "🧶 裹紧小围巾，圣诞做最甜的崽～",
-            "🎁 礼物不重要，重要的是有人惦记你",
-            "🌟 星光照亮你",
-            "💖 一生被爱，坦荡自在",
-            "🌟 眼里有光，心中有爱",
-            "✨ 岁岁年年，万般皆宜",
-            "🥳 愿你喜乐无忧",
-            "🍬 生活甜甜，好运连连",
-            "☕ 祝你日日有小暖",
-            "🌿 愿你步步遇清欢",
-            "🎈 大胆往前走，我永远站你这边",
-            "💫 不被理解也没关系，我懂你就好",
-            "🌟 你的存在，本身就很有意义",
-            "🥰 不用迎合谁，做自己就最珍贵",
-            "🎀 你可以做任何想做的事，我都支持",
-            "🧡 不管怎样，我都无条件站你",
-            "❄️ 雪落有期，美好如约，圣诞安康",
-            "🦌 冬遇圣诞，暮落温柔，万事顺意",
-            "☁️ 岁末冬安，圣诞喜乐，步履所至皆美好",
-
-        ];
-
-        const CONFIG = {
-            goldCount: 400, 
-            silverCount: 400,   
-            gemCount: 250,      
-            emeraldCount: 250,  
-            dustCount: 800,    
-            treeHeight: 75,
-            maxRadius: 30,
-            camDistance: 130, 
-            bloomStrength: 0.7,
-            bloomThreshold: 0.3,
-            bloomRadius: 0.5
-        };
-
-        const STATE = { TREE: 'tree', EXPLODED: 'exploded' };
-        let currentState = STATE.TREE;
+                                <button class="button new__button">
+                                    <i class='bx bx-cart-alt new__icon'></i>
+                                </button>
+                            </div>
         
-        let scene, camera, renderer, composer;
-        let mainGroup = new THREE.Group();
-        let goldMesh, silverMesh, gemMesh, emeraldMesh, dustSystem;
-        let raycaster, mouse;
+                            <div class="new__content swiper-slide">
+                                <div class="new__tag">New</div>
+                                <img src="assets/img/new3-img.png" alt="" class="new__img">
+                                <h3 class="new__title">Witch Hat</h3>
+                                <span class="new__subtitle">Accessory</span>
         
-        let logicData = { gold: [], silver: [], gem: [], emerald: [], dust: [], star: null };
-        const dummy = new THREE.Object3D();
-        let time = 0;
-        let textContainer;
-        let bubbleTimer = null;
+                                <div class="new__prices">
+                                    <span class="new__price">$4.99</span>
+                                    <span class="new__discount">$9.99</span>
+                                </div>
+
+                                <button class="button new__button">
+                                    <i class='bx bx-cart-alt new__icon'></i>
+                                </button>
+                            </div>
         
-        window.toggleUI = function() {
-            document.getElementById('canvas-wrapper').classList.toggle('hide-ui');
-        };
+                            <div class="new__content swiper-slide">
+                                <div class="new__tag">New</div>
+                                <img src="assets/img/new4-img.png" alt="" class="new__img">
+                                <h3 class="new__title">Rip</h3>
+                                <span class="new__subtitle">Accessory</span>
+        
+                                <div class="new__prices">
+                                    <span class="new__price">$24.99</span>
+                                    <span class="new__discount">$44.99</span>
+                                </div>
 
-        function initThree() {
-            const wrapper = document.getElementById('canvas-wrapper');
-            const container = document.getElementById('canvas-container');
-            textContainer = document.getElementById('message-container');
-            
-            scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x050505); 
-            scene.fog = new THREE.FogExp2(0x050505, 0.002);
+                                <button class="button new__button">
+                                    <i class='bx bx-cart-alt new__icon'></i>
+                                </button>
+                            </div>
+        
+                            <div class="new__content swiper-slide">
+                                <div class="new__tag">New</div>
+                                <img src="assets/img/new5-img.png" alt="" class="new__img">
+                                <h3 class="new__title">Terrifying Crystal Ball</h3>
+                                <span class="new__subtitle">Accessory</span>
+        
+                                <div class="new__prices">
+                                    <span class="new__price">$5.99</span>
+                                    <span class="new__discount">$12.99</span>
+                                </div>
 
-            raycaster = new THREE.Raycaster();
-            mouse = new THREE.Vector2();
+                                <button class="button new__button">
+                                    <i class='bx bx-cart-alt new__icon'></i>
+                                </button>
+                            </div>
+        
+                            <div class="new__content swiper-slide">
+                                <div class="new__tag">New</div>
+                                <img src="assets/img/new6-img.png" alt="" class="new__img">
+                                <h3 class="new__title">Witch Broom</h3>
+                                <span class="new__subtitle">Accessory</span>
+        
+                                <div class="new__prices">
+                                    <span class="new__price">$7.99</span>
+                                    <span class="new__discount">$14.99</span>
+                                </div>
 
-            camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-            updateCameraPosition();
+                                <button class="button new__button">
+                                    <i class='bx bx-cart-alt new__icon'></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-            renderer = new THREE.WebGLRenderer({ 
-                antialias: false, 
-                powerPreference: "high-performance"
-            });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            renderer.toneMapping = THREE.ACESFilmicToneMapping;
-            container.appendChild(renderer.domElement);
+            <!--==================== OUR NEWSLETTER ====================-->
+            <section class="section newsletter">
+                <div class="newsletter__container container">
+                    <h2 class="section__title">Our Newsletter</h2>
+                    <p class="newsletter__description">
+                        Promotion new products and sales. Directly to your inbox
+                    </p>
 
-            const pmremGenerator = new THREE.PMREMGenerator(renderer);
-            scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
+                    <form action="" class="newsletter__form">
+                        <input type="text" placeholder="Enter your email" class="newsletter__input">
+                        <button class="button">
+                            Subscribe
+                        </button>
+                    </form>
+                </div>
+            </section>
+        </main>
 
-            scene.add(new THREE.AmbientLight(0xffffff, 0.2));
-            const spotLight = new THREE.SpotLight(0xffddaa, 100);
-            spotLight.position.set(30, 80, 50);
-            scene.add(spotLight);
-            
-            const renderScene = new RenderPass(scene, camera);
-            const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
-            bloomPass.threshold = CONFIG.bloomThreshold;
-            bloomPass.strength = CONFIG.bloomStrength;
-            bloomPass.radius = CONFIG.bloomRadius;
-            
-            composer = new EffectComposer(renderer);
-            composer.addPass(renderScene);
-            composer.addPass(bloomPass);
+        <!--==================== FOOTER ====================-->
+            <footer class="footer section">
+                <div class="footer__container container grid">
+                    <div class="footer__content">
+                        <a href="#" class="footer__logo">
+                            <img src="assets/img/logo.png" alt="" class="footer__logo-img">
+                            Halloween
+                        </a>
 
-            createMaterialsAndMeshes();
-            createDust();
-            createStarField();
+                        <p class="footer__description">Enjoy the scariest night <br> of your life.</p>
+                        
+                        <div class="footer__social">
+                            <a href="https://www.facebook.com/" target="_blank" class="footer__social-link">
+                                <i class='bx bxl-facebook'></i>
+                            </a>
+                            <a href="https://www.instagram.com/" target="_blank" class="footer__social-link">
+                                <i class='bx bxl-instagram-alt' ></i>
+                            </a>
+                            <a href="https://twitter.com/" target="_blank" class="footer__social-link">
+                                <i class='bx bxl-twitter' ></i>
+                            </a>
+                        </div>
+                    </div>
 
-            scene.add(mainGroup);
-            
-            window.addEventListener('resize', onWindowResize);
-            wrapper.addEventListener('pointerup', onPointerUp);
+                    <div class="footer__content">
+                        <h3 class="footer__title">About</h3>
+                        
+                        <ul class="footer__links">
+                            <li>
+                                <a href="#" class="footer__link">About Us</a>
+                            </li>
+                            <li>
+                                <a href="#" class="footer__link">Features</a>
+                            </li>
+                            <li>
+                                <a href="#" class="footer__link">News</a>
+                            </li>
+                        </ul>
+                    </div>
 
-            setTimeout(() => { document.getElementById('loading').style.opacity = 0; }, 1000);
-        }
+                    <div class="footer__content">
+                        <h3 class="footer__title">Our Services</h3>
+                        
+                        <ul class="footer__links">
+                            <li>
+                                <a href="#" class="footer__link">Pricing</a>
+                            </li>
+                            <li>
+                                <a href="#" class="footer__link">Discounts</a>
+                            </li>
+                            <li>
+                                <a href="#" class="footer__link">Shipping mode</a>
+                            </li>
+                        </ul>
+                    </div>
 
-        function updateCameraPosition() {
-            const aspect = window.innerWidth / window.innerHeight;
-            if (aspect < 1) {
-                camera.position.set(0, 0, CONFIG.camDistance + (1 - aspect) * 100);
-            } else {
-                camera.position.set(0, 0, CONFIG.camDistance);
-            }
-        }
+                    <div class="footer__content">
+                        <h3 class="footer__title">Our Company</h3>
+                        
+                        <ul class="footer__links">
+                            <li>
+                                <a href="#" class="footer__link">Blog</a>
+                            </li>
+                            <li>
+                                <a href="#" class="footer__link">About us</a>
+                            </li>
+                            <li>
+                                <a href="#" class="footer__link">Our mision</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
 
-        function createBubble() {
-            const text = GREETINGS[Math.floor(Math.random() * GREETINGS.length)];
-            const el = document.createElement('div');
-            el.className = 'bubble-message';
-            el.innerText = text;
-            
-            // 优化分布算法，确保即使冒泡多了也不会全部重叠
-            const randX = 5 + Math.random() * 85; 
-            const randY = 15 + Math.random() * 65; 
-            el.style.left = randX + '%';
-            el.style.top = randY + '%';
-            
-            const duration = 3 + Math.random() * 2.5; // 持续时间随机 3-5.5s
-            el.style.animationDuration = duration + 's';
-            el.addEventListener('animationend', () => el.remove());
-            textContainer.appendChild(el);
-        }
+                <span class="footer__copy">&#169; Bedimcode. All rigths reserved</span>
 
-        function startBubbleLoop() {
-            if (bubbleTimer) return;
-            // 瞬间喷发量增加：从 2 增加到 15
-            for(let i = 0; i < 15; i++) {
-                setTimeout(createBubble, Math.random() * 1000);
-            }
-            // 生成频率增加：从 600ms 缩短到 150ms
-            bubbleTimer = setInterval(createBubble, 150);
-        }
+                <img src="assets/img/footer1-img.png" alt="" class="footer__img-one">
+                <img src="assets/img/footer2-img.png" alt="" class="footer__img-two">
+            </footer>
 
-        function stopBubbleLoop() {
-            if (bubbleTimer) { clearInterval(bubbleTimer); bubbleTimer = null; }
-            textContainer.innerHTML = '';
-        }
+            <!--=============== SCROLL UP ===============-->
+            <a href="#" class="scrollup" id="scroll-up">
+                <i class='bx bx-up-arrow-alt scrollup__icon'></i>
+            </a>
+        
+        <!--=============== SCROLL REVEAL ===============-->
+        <script src="assets/js/scrollreveal.min.js"></script>
 
-        function onPointerUp(event) {
-            const rect = renderer.domElement.getBoundingClientRect();
-            mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-            mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-
-            if (currentState === STATE.EXPLODED) {
-                currentState = STATE.TREE;
-                stopBubbleLoop();
-                document.getElementById('ui-layer').style.opacity = 1;
-                return;
-            }
-
-            if (currentState === STATE.TREE) {
-                raycaster.setFromCamera(mouse, camera);
-                const intersects = raycaster.intersectObjects([goldMesh, silverMesh, gemMesh, emeraldMesh, logicData.star]);
-                if (intersects.length > 0) {
-                    currentState = STATE.EXPLODED;
-                    startBubbleLoop();
-                    document.getElementById('ui-layer').style.opacity = 0;
-                }
-            }
-        }
-
-        function createMaterialsAndMeshes() {
-            const goldMat = new THREE.MeshPhysicalMaterial({ color: 0xffaa00, metalness: 1.0, roughness: 0.15, emissive: 0xaa5500, emissiveIntensity: 0.1 });
-            const silverMat = new THREE.MeshPhysicalMaterial({ color: 0xffffff, metalness: 0.9, roughness: 0.2 });
-            const gemMat = new THREE.MeshPhysicalMaterial({ color: 0xff0044, metalness: 0.1, roughness: 0.0, transmission: 0.6, emissive: 0x550011, emissiveIntensity: 0.4 });
-            const emeraldMat = new THREE.MeshPhysicalMaterial({ color: 0x00aa55, metalness: 0.2, roughness: 0.1, transmission: 0.5, emissive: 0x002211, emissiveIntensity: 0.3 });
-
-            goldMesh = createInstancedMesh(new THREE.SphereGeometry(0.7, 8, 8), goldMat, CONFIG.goldCount, logicData.gold);
-            silverMesh = createInstancedMesh(new THREE.BoxGeometry(0.8, 0.8, 0.8), silverMat, CONFIG.silverCount, logicData.silver);
-            gemMesh = createInstancedMesh(new THREE.OctahedronGeometry(0.8, 0), gemMat, CONFIG.gemCount, logicData.gem);
-            emeraldMesh = createInstancedMesh(new THREE.ConeGeometry(0.5, 1.2, 5), emeraldMat, CONFIG.emeraldCount, logicData.emerald);
-
-            const starGeo = new THREE.OctahedronGeometry(3.0, 0);
-            const starMat = new THREE.MeshPhysicalMaterial({ color: 0xffffff, emissive:0xffffee, emissiveIntensity:1.5 });
-            const star = new THREE.Mesh(starGeo, starMat);
-            const starTreePos = new THREE.Vector3(0, CONFIG.treeHeight/2 + 2.5, 0);
-            star.userData = { treePos: starTreePos, explosionPos: new THREE.Vector3(0, 50, -30) };
-            star.position.copy(starTreePos);
-            mainGroup.add(star);
-            logicData.star = star;
-        }
-
-        function createInstancedMesh(geo, mat, count, dataArray) {
-            const mesh = new THREE.InstancedMesh(geo, mat, count);
-            mainGroup.add(mesh);
-            for (let i = 0; i < count; i++) {
-                const h = Math.random() * CONFIG.treeHeight - CONFIG.treeHeight/2;
-                const normH = (h + CONFIG.treeHeight/2) / CONFIG.treeHeight;
-                const rMax = CONFIG.maxRadius * (1 - normH) * 1.1; 
-                const r = Math.sqrt(Math.random()) * rMax; 
-                const theta = Math.random() * Math.PI * 2;
-                const treePos = new THREE.Vector3(r * Math.cos(theta), h, r * Math.sin(theta));
-                const explodeR = 50 + Math.random() * 30;
-                const explodePos = randomSpherePoint(explodeR);
-                dataArray.push({
-                    treePos, explosionPos: explodePos, currentPos: treePos.clone(),
-                    scale: 0.5 + Math.random() * 0.9,
-                    rotSpeed: new THREE.Euler(Math.random()*0.02, Math.random()*0.02, 0),
-                    rotation: new THREE.Euler(Math.random()*Math.PI, Math.random()*Math.PI, 0)
-                });
-            }
-            return mesh;
-        }
-
-        function randomSpherePoint(r) {
-            const u = Math.random(), v = Math.random();
-            const theta = 2 * Math.PI * u;
-            const phi = Math.acos(2 * v - 1);
-            return new THREE.Vector3(
-                r * Math.sin(phi) * Math.cos(theta), 
-                r * Math.sin(phi) * Math.sin(theta), 
-                r * Math.cos(phi)
-            );
-        }
-
-        function createDust() {
-            const geo = new THREE.BufferGeometry();
-            const pos = new Float32Array(CONFIG.dustCount * 3);
-            for(let i=0; i<CONFIG.dustCount; i++) {
-                const h = Math.random() * CONFIG.treeHeight - CONFIG.treeHeight/2;
-                const r = Math.random() * CONFIG.maxRadius + 5;
-                const theta = Math.random() * Math.PI * 2;
-                const tx = r*Math.cos(theta), tz = r*Math.sin(theta);
-                const exP = randomSpherePoint(50 + Math.random() * 40);
-                logicData.dust.push({
-                    treePos: new THREE.Vector3(tx, h, tz), explosionPos: exP, currentPos: new THREE.Vector3(tx, h, tz), velocity: Math.random() * 0.05 + 0.02
-                });
-                pos[i*3] = tx; pos[i*3+1] = h; pos[i*3+2] = tz;
-            }
-            geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-            dustSystem = new THREE.Points(geo, new THREE.PointsMaterial({ color: 0xffd700, size: 0.4, transparent: true, opacity: 0.4, blending: THREE.AdditiveBlending }));
-            mainGroup.add(dustSystem);
-        }
-
-        function createStarField() {
-            const geo = new THREE.BufferGeometry();
-            const pos = [];
-            for(let i=0; i<400; i++) pos.push((Math.random()-0.5)*600, (Math.random()-0.5)*600, (Math.random()-0.5)*600);
-            geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
-            scene.add(new THREE.Points(geo, new THREE.PointsMaterial({color: 0x444444, size: 0.8})));
-        }
-
-        function animate() {
-            requestAnimationFrame(animate);
-            time += 0.01;
-            const isExploded = currentState === STATE.EXPLODED;
-            const lerpSpeed = isExploded ? 0.03 : 0.06;
-
-            [goldMesh, silverMesh, gemMesh, emeraldMesh].forEach((m, idx) => {
-                const data = [logicData.gold, logicData.silver, logicData.gem, logicData.emerald][idx];
-                updateMeshLogic(m, data, isExploded, lerpSpeed);
-            });
-
-            updateDustLogic(isExploded, lerpSpeed);
-            
-            if (logicData.star) {
-                const target = isExploded ? logicData.star.userData.explosionPos : logicData.star.userData.treePos;
-                logicData.star.position.lerp(target, lerpSpeed);
-                logicData.star.rotation.y += 0.01;
-            }
-
-            mainGroup.rotation.y += isExploded ? 0.001 : 0.004;
-            composer.render();
-        }
-
-        function updateMeshLogic(mesh, dataArray, isExploded, speed) {
-            for (let i = 0; i < dataArray.length; i++) {
-                const item = dataArray[i];
-                item.currentPos.lerp(isExploded ? item.explosionPos : item.treePos, speed);
-                item.rotation.x += item.rotSpeed.x;
-                item.rotation.y += item.rotSpeed.y;
-                dummy.position.copy(item.currentPos);
-                dummy.rotation.copy(item.rotation);
-                dummy.scale.setScalar(item.scale);
-                dummy.updateMatrix();
-                mesh.setMatrixAt(i, dummy.matrix);
-            }
-            mesh.instanceMatrix.needsUpdate = true;
-        }
-
-        function updateDustLogic(isExploded, speed) {
-            const positions = dustSystem.geometry.attributes.position.array;
-            for(let i=0; i<logicData.dust.length; i++) {
-                const item = logicData.dust[i];
-                if (isExploded) {
-                    item.currentPos.lerp(item.explosionPos, speed * 0.5);
-                } else {
-                    item.currentPos.x += (item.treePos.x - item.currentPos.x) * speed;
-                    item.currentPos.z += (item.treePos.z - item.currentPos.z) * speed;
-                    item.currentPos.y += item.velocity;
-                    if(item.currentPos.y > CONFIG.treeHeight/2) item.currentPos.y = -CONFIG.treeHeight/2;
-                }
-                positions[i*3] = item.currentPos.x;
-                positions[i*3+1] = item.currentPos.y;
-                positions[i*3+2] = item.currentPos.z;
-            }
-            dustSystem.geometry.attributes.position.needsUpdate = true;
-        }
-
-        function onWindowResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            updateCameraPosition();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            composer.setSize(window.innerWidth, window.innerHeight);
-        }
-
-        initThree();
-        animate();
-    </script>
-</body>
+        <!--=============== SWIPER JS ===============-->
+        <script src="assets/js/swiper-bundle.min.js"></script>
+        
+        <!--=============== MAIN JS ===============-->
+        <script src="assets/js/main.js"></script>
+    </body>
 </html>
